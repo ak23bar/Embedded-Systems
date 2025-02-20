@@ -1,0 +1,109 @@
+/*
+ * lab3_main.c, starter code
+ *
+ * ECE 266 Lab 3, fall 2024
+ *
+ * Created by Zhao Zhang
+ * Edited by Akbar and David
+ */
+
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <driverlib/sysctl.h>
+#include <inc/hw_ints.h>
+#include <inc/hw_memmap.h>
+#include <inc/hw_i2c.h>
+#include <driverlib/gpio.h>
+#include <driverlib/pin_map.h>
+#include <driverlib/i2c.h>
+#include "seg7.h"
+#include "launchpad.h"
+#include "clockupdate.h"
+
+/********************************************************************************
+ * Global declarations
+ *******************************************************************************/
+
+// The state of the 7-segment display. See seg7.h for the definition of Seg7Display.
+Seg7Display seg7 = { { 0, 0, 0, 0 }, false }; // initial state is "3210" with colon off
+
+// Events for clock update and push button
+Event clock_update_event;
+Event push_button_event;
+
+/********************************************************************************
+ * Task: Check push button events. If SW1 is pushed, advance minutes by 1.
+ * If SW2 is pushed, reset seconds to 00.
+ * If SW3 is pushed, reset clock to 00 00.
+ *
+ * This is an interrupt-processing function.
+ *******************************************************************************/
+
+void CheckPushButton(Event *event)
+{
+    // YOUR CODE STARTS HERE
+    // See the starter code for Lab 1 for a template for this function
+    int input = PushButtonRead();
+
+    switch(input){
+
+    case 1:
+        seg7.digit[2]++;
+         if (seg7.digit[2] == 10) {
+             seg7.digit[2] = 0;
+             seg7.digit[3] ++;
+             if(seg7.digit[3] == 6){
+                 seg7.digit[3] = 0;
+                 seg7.digit[2] = 0;
+                 seg7.digit[1] = 0;
+                 seg7.digit[0] = 0;
+             }
+         }
+         break;
+
+    case 2:
+        seg7.digit[1] = 0;
+        seg7.digit[0] = 0;
+
+        break;
+    }
+    Seg7Update(&seg7);
+}
+
+/********************************************************************************
+ * The main function: Print out a message, schedule the first callback event(s),
+ * and then run the callback scheduler.
+ *******************************************************************************/
+
+int main(void)
+{
+    // Initialize the Tiva C LaunchPad
+    LaunchPadInit();
+    Seg7Init();
+
+    // Initialize the events
+    EventInit(&clock_update_event, ClockUpdate);
+    EventInit(&push_button_event, CheckPushButton);
+
+    // Print out a message. See uprintf() in launchpad.h
+    uprintf("\n\r");
+    uprintf("%s\n\r", "Lab 3: Wall clock");
+
+    // Schedule the first event for clock update at 100ms
+    EventSchedule(&clock_update_event, 100);
+
+    // Register push_button_event with push button ISR
+    PushButtonEventRegister(&push_button_event);
+
+    // Run the callback scheduler
+    // See schdExecute() in launchpad.h
+    while (true)
+    {
+        // Wait for interrupt events
+        asm("   wfi");
+
+        // Check and execute events
+        EventExecute();
+    }
+}

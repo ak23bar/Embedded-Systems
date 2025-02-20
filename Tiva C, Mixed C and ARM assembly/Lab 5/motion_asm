@@ -1,0 +1,17 @@
+.cdecls "motion_h.h"
+        .text
+					.ref motion_sensor
+_motion_sensor		.field motion_sensor
+_GPIO_PORTC_BASE   	.field  GPIO_PORTC_BASE
+
+
+        .global MotionDetected
+        .asmfunc
+MotionDetected
+		PUSH 	{LR}
+		LDR 	r0, _motion_sensor
+		LDRB    r1, [r0, #0]
+		BL      MotionISR
+		MOV     r0, r1
+		POP 	{PC}			
+		.endasmfunc
