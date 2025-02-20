@@ -57,7 +57,7 @@ void TriggerRangerReading(Event *event)
     uint32_t distance;
 
 
-    printf("Ranger reading: %u \r\n", (uint32_t)pulseWidth);
+    uprintf("Ranger reading: %u \r\n", (uint32_t)pulseWidth);
 
     if (sys.display_mode == Inch){
         seg7.colon_on = true;
@@ -135,9 +135,9 @@ void TriggerTemperatureReading(Event *event)
     EventSchedule(event, event->time + 4000);
 }
 
- /* * Process temperature reading data
-         */
-  void ProcessTemperatureReading(Event *event)
+/* * Process temperature reading data*/
+
+void ProcessTemperatureReading(Event *event)
         {
             if (sys.display_mode == Heat){
 
@@ -145,7 +145,7 @@ void TriggerTemperatureReading(Event *event)
             int temp10 = temp_F * 10;
 
             // Print on terminal
-            uprintf("Temperature Reading Sensor: %u.%u \r\n", temp10 / 10, temp10 % 10);
+            printf("Temperature Reading Sensor: %u.%u \r\n", temp10 / 10, temp10 % 10);
 
             //Print on Seg7
             int tempInt = (int) temp_F;
@@ -155,7 +155,7 @@ void TriggerTemperatureReading(Event *event)
             seg7.digit[2] = (tempInt % 10);
             seg7.digit[3] = ((tempInt / 10) % 10);
             seg7.colon_on = true;   //Turn on colon
-                if(tempInt > 80){
+                if(tempInt >= 90){
 
                    LedTurnOnOff(true /* red */, false /* blue */, false /* green */);
                    sys.heat = true;
@@ -199,13 +199,13 @@ void ToggleBuzzer(Event *event) {
 
     if (sys.display_mode == Inch) {
         if (sys.activated) { // Red case: constant buzzer at full volume
-            MusicSetBuzzer(4 /* pitch G4 */, 2 /* high volume */); // Example: loud G4
+            MusicSetBuzzer(4 /* pitch G4 */, 2 /* high volume */); // loud G4
             buzzer_state = true;
         } else if (sys.alerted) { // Yellow case: lower volume, toggling
             if (buzzer_state) {
                 MusicTurnOffBuzzer();
             } else {
-                MusicSetBuzzer(4 /* pitch G4 */, 0 /* low volume */); // Example: soft G4
+                MusicSetBuzzer(4 /* pitch G4 */, 0 /* low volume */); // soft G4
             }
             buzzer_state = !buzzer_state;
             EventSchedule(event, event->time + 500); // Schedule next toggle in 500 ms
@@ -227,16 +227,6 @@ void ToggleBuzzer(Event *event) {
     EventSchedule(event, event->time + 500);
 }
 
-
-
-
-
-
-
-
-
-
-
 /*******************************************
  * The main function
  ******************************************/
@@ -256,12 +246,12 @@ void main(void)
     EventInit(&buzzer_play_event, ToggleBuzzer); // Initialize ToggleBuzzer event
     EventInit(&push_button_event, CheckPushButton);
     // Initialize and schedule timing events
-     EventInit(&ts_trigger_event, TriggerTemperatureReading);
-     EventSchedule(&ts_trigger_event, 100);
+    EventInit(&ts_trigger_event, TriggerTemperatureReading);
+    EventSchedule(&ts_trigger_event, 100);
 
-     // Initialize and register ISR events
-     EventInit(&ts_data_event, ProcessTemperatureReading);
-     TsEventRegister(&ts_data_event);
+    // Initialize and register ISR events
+    EventInit(&ts_data_event, ProcessTemperatureReading);
+    TsEventRegister(&ts_data_event);
 
 
     //call the ranger event
