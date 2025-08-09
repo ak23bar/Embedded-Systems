@@ -1,4 +1,4 @@
-# ECE 266: Embedded Systems
+# Embedded Systems
 
 This repository contains all major lab assignments as well as my final project completed for Embedded Systems. The course focused on mixed C and ARM assembly programming for microcontrollers, embedded design principles, hardware-software interaction, and peripheral interfacing. Labs were primarily conducted using a Tiva C microcontroller and CCS.
 
