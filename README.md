@@ -1,65 +1,36 @@
-# Embedded Systems
+# Embedded Systems Projects
 
-This repository contains all major lab assignments as well as my final project completed for Embedded Systems. The course focused on mixed C and ARM assembly programming for microcontrollers, embedded design principles, hardware-software interaction, and peripheral interfacing. Labs were primarily conducted using a Tiva C microcontroller and CCS.
+This repository contains lab exercises and embedded-systems project code used for learning and experimentation with microcontrollers (C, Assembly). The projects are organized by lab and utility folders. Each lab directory contains source files, headers, and any supporting build/startup files required for that exercise.
 
----
+## Repository structure
 
-# Labs
+- Lab 2, Lab 3, Lab 4, Lab 5, Lab 6, Lab 7, Lab 8
+- Lab2Final
+- Util
 
-The lab series introduced core embedded systems concepts such as GPIO control, timers, interrupts, PWM, ADC input, and basic communication protocols. While this was a group-based lab course, the majority of the work—including implementation, debugging, and documentation—was independently completed by me due to limited contributions from assigned lab partners.
+(Each lab directory contains the source code and build files for that lab. See the README in a lab folder or the code comments for build/run instructions.)
 
-### Labs Included:
-- **Lab 2 / Lab2Final** – Introduction to digital I/O: controlling onboard LEDs and push buttons using GPIO.
-- **Lab 3** – Software debouncing for mechanical buttons and toggling LED states through interrupt-based control.
-- **Lab 4** – Timer-based interrupt generation and system state transitions.
-- **Lab 5** – PWM signal generation for LED brightness control using hardware timers.
-- **Lab 6** – Analog-to-digital conversion (ADC) for sensor input, including potentiometer reading.
-- **Lab 7** – ADC scaling and conversion to voltage or temperature readings for display or further processing.
-- **Lab 8** – UART/serial communication basics and debugging over terminal.
-- **Util Folder** – Contains reusable utilities and headers (GPIO configuration, macros, timing helpers, etc.).
+## Languages
+This repository contains mostly C code, with some Assembly and build scripts.
 
----
+## How to build and run (general)
+1. Open the lab folder you want to build.
+2. Use your toolchain for the target microcontroller (e.g., TI CCS, gcc-arm, or another toolchain depending on your board).
+3. Follow comments in the source files for pin mappings and hardware notes.
+4. For projects requiring startup scripts or linker files, ensure your toolchain uses the included startup and linker files.
 
-## Final Project: Ultra Heat Sensor
+## Contributing
+- Prefer creating a branch per change (git checkout -b my-change).
+- Keep commits focused and include descriptive messages.
+- If adding new projects, include a short README in that project folder describing hardware, build steps, and expected behavior.
 
-**Title:** *Ultra Heat Sensor Alarm System*  
-**Description:**  
-This project combined multiple embedded subsystems into a working heat and distance alert mechanism. The system used:
-- An ultrasonic sensor to detect distance
-- A temperature sensor to monitor ambient heat
-- A seven-segment display and LEDs for output
-- A buzzer driven by PWM for alarm signaling
+## Archiving or removing projects
+If you need to remove a completed project from the main branch (for example, to keep the main branch minimal), consider:
+- Moving the project to an `archive/` folder or a separate branch so history is preserved.
+- Creating a PR that documents the removal and links to an archive branch or a downloadable archive.
 
-The project was designed to simulate a safety alert device, with adjustable thresholds and real-time response logic coded in C and ARM. I handled the complete integration, hardware testing, and software debugging.
-
----
-
-## Concepts Covered
-
-- GPIO configuration and edge-triggered interrupts  
-- Hardware timer initialization and control  
-- PWM signal generation and duty cycle adjustment  
-- ADC sampling and signal conversion  
-- UART communication and serial monitoring  
-- Modular embedded C and ARM assembly programming  
-- Real-time debugging and hardware troubleshooting
-
----
-
-## Notes
-
-All code in this repository was written with correctness, modularity, and documentation in mind. Due to unequal division of work in the lab group, I took the lead on nearly every lab and the final project, completing most assignments independently to ensure functionality and timely submission.
-
----
-
-## Tools & Hardware
-
-- **Platform:** Texas Instruments Tiva C ARM® Cortex  
-- **IDE:** Code Composer Studio  
-- **Languages:** C, ARM assembly 
-
----
+## License
+Include your license here (e.g., MIT, GPL) or add a LICENSE file to the repository.
 
 ## Contact
-
-For questions or walkthroughs of any project or lab, feel free to connect with me on [LinkedIn](www.linkedin.com/in/akbar-aman-94b1b6263) or reach out directly.
+Repository owner: ak23bar
